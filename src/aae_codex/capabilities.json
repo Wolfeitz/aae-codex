@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "adapter": "codex",
+  "display_name": "Codex",
+  "verified_at": "2026-09-04",
+  "verified_versions": {"cli": ["0.153.0"]},
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+    "https://learn.chatgpt.com/docs/build-skills",
+    "https://learn.chatgpt.com/docs/hooks",
+    "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+    "https://learn.chatgpt.com/docs/extend/mcp",
+    "https://learn.chatgpt.com/docs/plugins"
+  ],
+  "surfaces": {
+    "instructions": {"status": "native", "artifact": "AGENTS.md"},
+    "skills": {"status": "native", "artifact": ".agents/skills/*/SKILL.md"},
+    "hooks": {"status": "native", "artifact": ".codex/hooks.json"},
+    "agents": {"status": "native", "artifact": ".codex/agents/*.toml"},
+    "mcp": {"status": "available", "artifact": ".codex/config.toml"},
+    "rules": {"status": "available", "artifact": ".rules"},
+    "sandbox_and_approvals": {"status": "native", "artifact": ".codex/config.toml"},
+    "plugins_cli": {"status": "available", "artifact": "Codex CLI plugin browser"},
+    "plugins_ide": {"status": "unavailable", "artifact": null},
+    "app_server": {"status": "available", "artifact": "codex app-server"}
+  }
+}

@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aae-codex"
+version = "0.1.0"
+description = "Native Codex adapter for Adaptive Agentic Engineering"
+requires-python = ">=3.10"
+dependencies = ["adaptive-agentic-engineering>=0.3.1,<0.4"]
+
+[project.scripts]
+aae-codex = "aae_codex.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+aae_codex = [
+  "capabilities.json",
+  "templates/*",
+  "templates/**/*",
+  "templates/.codex/*",
+  "templates/.codex/**/*",
+]
