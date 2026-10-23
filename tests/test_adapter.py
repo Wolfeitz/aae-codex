@@ -19,16 +19,18 @@ class CodexAdapterTests(unittest.TestCase):
             root = Path(directory)
             self.assertEqual(install(root), 0)
             verified_version = _capabilities()["verified_versions"]["cli"][-1]
+            probed_version = verified_version
             def probe(arguments: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
-                output = verified_version if arguments[-1] == "--version" else "hooks stable true"
+                output = probed_version if arguments[-1] == "--version" else "hooks stable true"
                 return subprocess.CompletedProcess(arguments, 0, output, "")
             with patch("aae_codex.cli.shutil.which", return_value="/test/codex"), patch(
                 "aae_codex.cli.subprocess.run", side_effect=probe
             ):
                 self.assertEqual(doctor(root, strict=True), 0)
+            probed_version = "0.0.0-unverified"
             with patch("aae_codex.cli.shutil.which", return_value="/test/codex"), patch(
                 "aae_codex.cli.subprocess.run",
-                return_value=subprocess.CompletedProcess([], 0, "0.0.0-unverified", ""),
+                side_effect=probe,
             ):
                 self.assertEqual(doctor(root, strict=True), 1)
             with patch("aae_codex.cli.shutil.which", return_value=None):
