@@ -3,13 +3,39 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from aae_codex.cli import PROJECTION_MARKER, handle_hook, install, sync_skills
 
+from aae_codex.cli import doctor, _capabilities
+
 
 class CodexAdapterTests(unittest.TestCase):
+    def test_strict_doctor_requires_verified_runtime(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.assertEqual(install(root), 0)
+            verified_version = _capabilities()["verified_versions"]["cli"][-1]
+            probed_version = verified_version
+            def probe(arguments: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+                output = probed_version if arguments[-1] == "--version" else "hooks stable true"
+                return subprocess.CompletedProcess(arguments, 0, output, "")
+            with patch("aae_codex.cli.shutil.which", return_value="/test/codex"), patch(
+                "aae_codex.cli.subprocess.run", side_effect=probe
+            ):
+                self.assertEqual(doctor(root, strict=True), 0)
+            probed_version = "0.0.0-unverified"
+            with patch("aae_codex.cli.shutil.which", return_value="/test/codex"), patch(
+                "aae_codex.cli.subprocess.run",
+                side_effect=probe,
+            ):
+                self.assertEqual(doctor(root, strict=True), 1)
+            with patch("aae_codex.cli.shutil.which", return_value=None):
+                self.assertEqual(doctor(root, strict=True), 1)
+
     def test_init_installs_native_files_and_preserves_existing(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

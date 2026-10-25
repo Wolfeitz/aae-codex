@@ -2,8 +2,8 @@
   "schema_version": 1,
   "adapter": "codex",
   "display_name": "Codex",
-  "verified_at": "2026-09-04",
-  "verified_versions": {"cli": ["0.153.0"]},
+  "verified_at": "2026-10-23",
+  "verified_versions": {"cli": ["0.153.0", "0.164.0"]},
   "sources": [
     "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
     "https://learn.chatgpt.com/docs/build-skills",
